@@ -4,12 +4,10 @@ import { useState, useEffect } from "react";
 import { auth } from '../firebase';
 import { User, onAuthStateChanged, signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
-import { FaShoppingCart } from 'react-icons/fa';
 
 const Navbar = () => {
   const [user, setUser] = useState<null | User>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [cartItems, setCartItems] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -18,11 +16,6 @@ const Navbar = () => {
     });
 
     return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    setCartItems(cart.length);
   }, []);
 
   const handleSignOut = async () => {
@@ -57,9 +50,9 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-blue-200 p-4 flex flex-col md:flex-row justify-between items-center z-20">
+    <nav className="bg-gray-900 p-4 flex flex-col md:flex-row justify-between items-center z-20">
       <div className="flex items-center mb-4 md:mb-0 w-full justify-between md:w-auto">
-        <Link href="/" className="text-3xl font-bold text-gray-700">
+        <Link href="/" className="text-3xl font-bold text-white">
           Logo
         </Link>
         {user ? (
@@ -100,20 +93,6 @@ const Navbar = () => {
             </button>
           </Link>
         )}
-      </div>
-
-      <div className="flex items-center mb-4 md:mb-0 md:ml-4">
-        <Link href="/Cart">
-          <button className="relative bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">
-            <FaShoppingCart className="inline mr-2" />
-            Cart
-            {cartItems > 0 && (
-              <span className="absolute top-0 right-0 mt-1 mr-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                {cartItems}
-              </span>
-            )}
-          </button>
-        </Link>
       </div>
 
       <form onSubmit={handleSearch} className="flex items-center w-full md:w-auto md:ml-4 mt-4 md:mt-0">
